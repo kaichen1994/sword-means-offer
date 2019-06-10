@@ -130,7 +130,7 @@
     - [**二叉树的深度**](#二叉树的深度)
         - [*题目描述*](#题目描述-40)
         - [*code*](#code-41)
-    - [*平衡二叉树**](#平衡二叉树)
+    - [**平衡二叉树**](#平衡二叉树)
         - [*题目描述*](#题目描述-41)
         - [*code*](#code-42)
     - [**数组中只出现一次的数字**](#数组中只出现一次的数字)
@@ -178,6 +178,12 @@
     - [**链表中环的入口节点**](#链表中环的入口节点)
         - [*题目描述*](#题目描述-56)
         - [*code*](#code-57)
+    - [**删除链表中的重复节点**](#删除链表中的重复节点)
+        - [*题目描述*](#题目描述-57)
+        - [*code*](#code-58)
+    - [**二叉树的下一个节点**](#二叉树的下一个节点)
+        - [*题目描述*](#题目描述-58)
+        - [*code*](#code-59)
 
 <!-- /TOC -->
 
@@ -520,9 +526,9 @@ public:
 
 ---
 ## **用两个栈实现队列**
-###*题目描述*
+### *题目描述*
     用两个栈来实现一个队列，完成队列的Push和Pop操作。 队列中的元素为int类型。
-###*code*
+### *code*
 ***栈和队列***
 ```cpp
 class Solution
@@ -614,7 +620,8 @@ public:
 ### *code*
 ***动态规划、递归和循环***
 
-***状态转移方程：*** $ f(n) = f(n-1) + f(n-2) $ 
+***状态转移方程：*** 
+$f(n) = f(n-1) + f(n-2)$ 
 ```cpp
 class Solution {
 public:
@@ -646,7 +653,8 @@ public:
 ### *code*
 ***动态规划，递归和循环***
 
-***状态转移方程：*** $ f(n) = f(n-1) + f(n-2) $ 
+***状态转移方程：*** 
+$f(n) = f(n-1) + f(n-2)$ 
 ```cpp
 class Solution {
 public:
@@ -674,7 +682,8 @@ public:
 ### *code*
 ***动态规划，递归和循环***
 
-***状态转移方程：*** $ f(n) = f(n-1) + f(n-2) + ... + f(0)$ ***，*** $ f(n-1) =  f(n-2) + f(n-3) + ... + f(0)$***，两式相减，有*** $f(n) = 2*f(n-1)$
+***状态转移方程：*** 
+$f(n) = f(n-1) + f(n-2) + ... + f(0)$ ***，*** $f(n-1) =  f(n-2) + f(n-3) + ... + f(0)$ ***，两式相减，有*** $f(n) = 2*f(n-1)$
 
 ***最终的状态转移方程：*** $f(n) = 2*f(n-1)$
 ```cpp
@@ -701,7 +710,8 @@ public:
 ### *code*
 ***动态规划，递归和循环***
 
-***状态转移方程：*** $ f(n) = f(n-1) + f(n-2) $
+***状态转移方程：*** 
+$f(n) = f(n-1) + f(n-2)$
 ```cpp
 class Solution {
 public:
@@ -747,7 +757,7 @@ public:
 ## **数值的整数次方**
 ### *题目描述*
     给定一个double类型的浮点数base和int类型的整数exponent。求base的exponent次方。
-###*code*
+### *code*
 ***代码的完整性***
 ```cpp
 class Solution {
@@ -777,7 +787,7 @@ public:
 
 ---
 ## **调整数组顺序使奇数位于偶数前面**
-###*题目描述*
+### *题目描述*
     输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有的奇数位于数组的前半部分，所有的偶数位于数组的后半部分，并保证奇数和奇数，偶数和偶数之间的相对位置不变。
 ### *code*
 ***代码的完整性，数组***
@@ -1457,7 +1467,7 @@ public:
     }
 };
 ```
-***w网页链接：[二叉搜索树与双向链表](https://www.cnblogs.com/edisonchou/p/4793345.html)***
+***网页链接：[二叉搜索树与双向链表](https://www.cnblogs.com/edisonchou/p/4793345.html)***
 
 ---
 ## **字符串的排列**
@@ -2111,7 +2121,7 @@ public:
 ***网页链接：[二叉树的深度](https://www.weiweiblog.cn/treedepth/)***
 
 ---
-## *平衡二叉树**
+## **平衡二叉树**
 ### *题目描述*
     输入一棵二叉树，判断该二叉树是否是平衡二叉树。
 ### *code*
@@ -2758,6 +2768,172 @@ public:
 ### *code*
 ***链表***
 ```cpp
-
+/*
+struct ListNode {
+    int val;
+    struct ListNode *next;
+    ListNode(int x) :
+        val(x), next(NULL) {
+    }
+};
+*/
+class Solution {
+public:
+    ListNode* EntryNodeOfLoop(ListNode* pHead)
+    {
+        ListNode* meet = meetingNode(pHead);
+        if(meet == nullptr){
+            return nullptr;
+        }
+        int CircleLen = 1;
+        ListNode* cur = meet;
+        while(cur->next != meet){
+            cur = cur->next;
+            ++CircleLen;
+        }
+        ListNode* slow = pHead;
+        ListNode* fast = pHead;
+        for(int i = 0; i < CircleLen; i++){
+            fast = fast->next;
+        }
+        while(slow != fast){
+            slow = slow->next;
+            fast = fast->next;
+        }
+        return fast;
+    }
+    ListNode* meetingNode(ListNode* pHead){
+        if(pHead == nullptr){
+            return nullptr;
+        }
+        ListNode* slow = pHead->next;
+        if(slow == nullptr){
+            return nullptr;
+        }
+        ListNode* fast = slow->next;
+        while(slow && fast){
+            if(fast == slow){
+                return fast;
+            }
+            slow = slow->next;
+            fast = fast->next;
+            if(fast){
+                fast = fast->next;
+            }
+        }
+        return nullptr;
+    }
+};
 ```
-***网页链接:[链表中环的入口节点]()***
+***网页链接:[链表中环的入口节点](https://blog.csdn.net/snow_7/article/details/52181049)***
+
+---
+## **删除链表中的重复节点**
+### *题目描述*
+    在一个排序的链表中，存在重复的结点，请删除该链表中重复的结点，重复的结点不保留，返回链表头指针。 例如，链表1->2->3->3->4->4->5 处理后为 1->2->5
+### *code*
+***链表***
+```cpp
+/*
+struct ListNode {
+    int val;
+    struct ListNode *next;
+    ListNode(int x) :
+        val(x), next(NULL) {
+    }
+};
+*/
+class Solution {
+public:
+    ListNode* deleteDuplication(ListNode* pHead)
+    {
+        if(pHead == nullptr){
+            return pHead;
+        }
+        ListNode* pre = nullptr;
+        ListNode* cur = pHead;
+        while(cur){
+            ListNode* pNext = cur->next;
+            bool needDel = false;
+            if(pNext && cur->val == pNext->val){
+               needDel = true;
+            }
+            if(!needDel){ //没有重复节点
+                pre = cur;
+                cur = cur->next;
+            }
+            else{//存在重复节点
+                ListNode* pToBeDel = cur;
+                int val = cur->val;
+                while(pToBeDel && pToBeDel->val == val){
+                    pNext = pToBeDel->next;
+                    delete pToBeDel;
+                    pToBeDel = nullptr;
+                    pToBeDel = pNext;
+                }
+                if(pre == nullptr){
+                    pHead = pNext;
+                }
+                else{
+                    pre->next = pNext;
+                }
+                cur = pNext;
+            }
+        }
+        return pHead;
+    }
+};
+```
+***网页链接：[删除链表中的重复节点](https://blog.csdn.net/cyuyanenen/article/details/51713513)***
+
+---
+## **二叉树的下一个节点**
+### *题目描述*
+    给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。注意，树中的结点不仅包含左右子结点，同时包含指向父结点的指针。
+### *code*
+***树***
+```cpp
+/*
+struct TreeLinkNode {
+    int val;
+    struct TreeLinkNode *left;
+    struct TreeLinkNode *right;
+    struct TreeLinkNode *next;
+    TreeLinkNode(int x) :val(x), left(NULL), right(NULL), next(NULL) {
+        
+    }
+};
+*/
+class Solution {
+public:
+    TreeLinkNode* GetNext(TreeLinkNode* pNode)
+    {
+        if(pNode == nullptr){
+            return nullptr;
+        }
+        TreeLinkNode* pNext = nullptr;
+        //如果一个节点有右子树，那么它的下一个节点就是它的右子树的最左子节点
+        if(pNode->right){
+            TreeLinkNode* Right = pNode->right;
+            while(Right->left){
+                Right = Right->left;
+            }
+            pNext = Right;
+        }
+        else if(pNode->next){
+            TreeLinkNode* cur = pNode;
+            TreeLinkNode* parent = pNode->next;
+            //如果节点是它父节点的左子节点，那么它的下一个节点就是它的父节点
+            //如果节点既没有右子树，而且父节点的右子节点：
+            //    沿着父节点的指针一路向上遍历，直到找到一个是它父节点的左子节点的节点。此时其父节点就是需要找的下一个节点
+            while(parent && cur == parent->right){
+                 cur = parent;
+                 parent = parent->next;
+            }
+            pNext = parent;
+        }
+        return pNext;
+    }
+};
+```
+***网页链接：[二叉树的下一个节点](https://www.jianshu.com/p/85eea9f1adf0)***
